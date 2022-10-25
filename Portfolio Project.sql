@@ -17,7 +17,7 @@ Order by 1,2
 
 
 -- Looking at Total case vs Total Deaths
---shoes the likelihood of dying if you contract covid in your country
+--Shows the likelihood of dying if you contract covid in your country
 
 
 SELECT Location, date, total_cases, total_deaths, (total_deaths/total_cases)* 100 AS DeathPercentage
@@ -38,7 +38,7 @@ and continent is not null
 Order by 1,2
 
 
---Countries with hightest Infection RAte compared to Population
+--Countries with hightest Infection rate compared to Population
 
 
   SELECT Location, population,MAX(total_cases) as HighestInfectionCount, MAX((total_cases/population))* 100 AS PercentPopulationInfected
@@ -79,13 +79,7 @@ GROUP BY continent
 ORDER BY TotalDeathCount DESC;
 
 --Global Numbers 
-/*
-SELECT date, SUM(new_cases) AS total_cases, SUM(cast(new_deaths as int)) As total_deaths, SUM(cast(new_deaths as int))/SUM(new_cases)* 100 AS DeathPercentage
-FROM PortfolioProject..CovidDeaths
---Where location like '%states%'
-where continent is not null
---GROUP BY date
-ORDER BY 1,2*/
+
 
 SELECT SUM(new_cases) AS total_cases, SUM(cast(new_deaths as int)) As total_deaths, SUM(cast(new_deaths as int))/SUM(new_cases)* 100 AS DeathPercentage
 FROM PortfolioProject..CovidDeaths
@@ -106,6 +100,7 @@ ORDER BY 2,3
 
 
 --CTE
+
 
 With PopvsVac (Continent, Location, Date, Population, New_Vaccinations, RollingPeopleVaccinated)
 as
@@ -153,6 +148,8 @@ FROM #PercentPopulationVacinated
 
 
 --Creating View to store data for later visualizations
+
+
 Create View PercentPopulationVaccinated as
 Select dea.continent,dea.location, dea.date, dea.population, vac.new_vaccinations
 ,SUM(cast(vac.new_vaccinations as bigint)) OVER (Partition by dea.location Order by dea.location,dea.date) as RollingPeopleVaccinated
